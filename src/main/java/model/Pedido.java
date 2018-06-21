@@ -85,9 +85,25 @@ public class Pedido {
 		this.id_cliente = id_cliente;
 	}
 
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public List<ItemPedido> getItens() {
+		return itens;
+	}
+
+	public void setItens(List<ItemPedido> itens) {
+		this.itens = itens;
+	}
+
 	@Override
 	public String toString() {
-		return "Pedido [id_pedido=" + id_pedido + ", formaPagamento=" + formaPagamento + ", estado=" + estado
+		return "\nPedido [id_pedido=" + id_pedido + ", formaPagamento=" + formaPagamento + ", estado=" + estado
 				+ ", dataCriacao=" + dataCriacao + ", dataModificacao=" + dataModificacao + ", totalPedido="
 				+ totalPedido + ", situacao=" + situacao + ", id_cliente=" + id_cliente + ", cliente=" + cliente
 				+ ", itens=" + itens + "]";

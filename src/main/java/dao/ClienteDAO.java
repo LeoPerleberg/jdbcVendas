@@ -36,7 +36,7 @@ public class ClienteDAO extends BaseDAO {
 
 	}
 
-	public Cliente getById(int i) throws SQLException {
+	public Cliente getById(Long i) throws SQLException {
 
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;

@@ -36,7 +36,7 @@ public class ProdutoDAO extends BaseDAO {
 
 	}
 
-	public Produto getById(int i) throws SQLException {
+	public Produto getById(Long i) throws SQLException {
 
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;

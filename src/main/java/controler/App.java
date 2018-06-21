@@ -4,10 +4,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 import dao.ClienteDAO;
-import dao.ItemPedidoDAO;
 import dao.ProdutoDAO;
+import dao.PedidoDAO;
 import model.Cliente;
-import model.ItemPedido;
+import model.Pedido;
 import model.Produto;
 
 
@@ -118,11 +118,23 @@ public class App {
 		}
     	imprimirListaClie(clienteDAO);
     	*/
-    	
-    	ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO();
-    	imprimirListaItem(itemPedidoDAO);
+
+    	PedidoDAO pedidoDAO = new PedidoDAO();
+		imprimirListaPedi(pedidoDAO);
     	System.out.println("\n");
+    	
     }
+
+
+	private static void imprimirListaPedi(PedidoDAO pedidoDAO) {
+		List<Pedido> pedidos;
+    	try {
+    		pedidos = pedidoDAO.getAll();
+        	System.out.println(pedidos);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
     
     
 	private static void imprimirListaProd(ProdutoDAO produtoDAO) {
@@ -135,21 +147,11 @@ public class App {
 		}
 	}
 
-	private static void imprimirListaClie(ClienteDAO cliente) {
+	private static void imprimirListaClie(ClienteDAO clienteDAO) {
 		List<Cliente> clientes;
 		try {
-			clientes = cliente.getAll();
+			clientes = clienteDAO.getAll();
 			System.out.println(clientes);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private static void imprimirListaItem(ItemPedidoDAO itemPedidoDAO) {
-		List<ItemPedido> itemPedidos;
-		try {
-			itemPedidos = itemPedidoDAO.getAll();
-			System.out.println(itemPedidos);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -163,6 +165,6 @@ public class App {
 	item.setTotalItem(1*produto.getValor())
 	ped.getItem(.).add(itm)
 	ped.setCliente(cliDAO.getClienteById(1))
-	pedidoDAO.insert(ped)
+	PedidoDAO.insert(ped)
 	*/
 }
