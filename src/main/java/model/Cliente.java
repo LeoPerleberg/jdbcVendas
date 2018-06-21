@@ -2,7 +2,6 @@ package model;
 
 public class Cliente {
 	private long id_cliente;
-	Pedido pedido = new Pedido();
 	private String nome;
 	private String sobrenome;
 	private boolean situacao;
@@ -54,13 +53,10 @@ public class Cliente {
 	public void setSituacao(boolean situacao) {
 		this.situacao = situacao;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return "\nCliente [id_cliente=" + id_cliente + ", nome=" + nome + ", sobrenome=" + sobrenome + ", situacao="
-				+ situacao + "]";
+		return "\nCliente [id_cliente=" + id_cliente + ", nome=" + nome + ", sobrenome="
+				+ sobrenome + ", situacao=" + situacao + "]";
 	}
 
 }

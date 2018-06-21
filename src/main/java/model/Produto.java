@@ -6,6 +6,7 @@ public class Produto {
 	private float valor;
 	private String descricao;
 	private boolean situacao;
+	ItemPedido itemPedido;
 	/**
 	 * @return the id_produto
 	 */
@@ -66,13 +67,10 @@ public class Produto {
 	public void setSituacao(boolean situacao) {
 		this.situacao = situacao;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return "\nProduto [id_produto=" + id_produto + ", nome=" + nome + ", valor=" + valor + ", descricao=" + descricao
-				+ ", situacao=" + situacao + "]";
+				+ ", situacao=" + situacao + ", itemPedido=" + itemPedido + "]";
 	}
 	
 }
