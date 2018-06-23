@@ -9,9 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.ItemPedido;
+import model.Pedido;
 import model.Produto;
 
 public class ItemPedidoDAO extends BaseDAO {
+	private Produto produto;
+
 	public List<ItemPedido> getAll() throws SQLException {
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
@@ -37,7 +40,7 @@ public class ItemPedidoDAO extends BaseDAO {
 
 	}
 
-	public ItemPedido getById(int i) throws SQLException {
+	public ItemPedido getById(ItemPedido item) throws SQLException {
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
 		ResultSet resultSet = null;
@@ -45,11 +48,12 @@ public class ItemPedidoDAO extends BaseDAO {
 		try {
 			connection = getConection();
 			prepareStatement = connection.prepareStatement("SELECT * FROM itempedido WHERE id_itemPedido = ?;");
-			prepareStatement.setInt(1, i);
+			prepareStatement.setLong(1, item.getId_itemPedido());
 			resultSet = prepareStatement.executeQuery();
-			ItemPedido item = null;
 			if (resultSet.next()) {
 				item = resultSetToItem(resultSet);
+			} else {
+				System.out.println("O item com id " + item.getId_itemPedido() + " não existe\n");
 			}
 			return item;
 		} catch (SQLException e) {
@@ -63,7 +67,7 @@ public class ItemPedidoDAO extends BaseDAO {
 
 	}
 	
-	public List<ItemPedido> getByIdPedido(Long i) throws SQLException {
+	public List<ItemPedido> getByIdPedido(Pedido pedido) throws SQLException {
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
 		ResultSet resultSet = null;
@@ -71,7 +75,7 @@ public class ItemPedidoDAO extends BaseDAO {
 		try {
 			connection = getConection();
 			prepareStatement = connection.prepareStatement("SELECT * FROM itempedido WHERE id_pedido = ?;");
-			prepareStatement.setLong(1, i);
+			prepareStatement.setLong(1, pedido.getId_pedido());
 			resultSet = prepareStatement.executeQuery();
 			List<ItemPedido> itens = new ArrayList<ItemPedido>();
 			while (resultSet.next()) {
@@ -95,17 +99,11 @@ public class ItemPedidoDAO extends BaseDAO {
 		ResultSet resultSet = null;
 
 		try {
-			String sql = "INSERT INTO itempedido(id_produto, id_pedido, quantidade, situacao, totalItem) VALUES (?, ?, ?, ?, ?);";
+			String sql = "INSERT INTO itempedido VALUES (?, ?, ?, ?, ?);";
 			connection = BaseDAO.getConection();
 			preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			itemToPreparedStatment(itemPedido, preparedStatement);
 			int cont = preparedStatement.executeUpdate();
-			if (itemPedido.getId_itemPedido() == 0L) {
-				resultSet = preparedStatement.getGeneratedKeys();
-				if (resultSet.next()) {
-					itemPedido.setId_itemPedido(resultSet.getLong("id_itemPedido"));
-				}
-			}
 			return cont > 0 ? true : false;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -180,8 +178,8 @@ public class ItemPedidoDAO extends BaseDAO {
 		preparedStatement.setLong(2, itemPedido.getId_pedido());
 		preparedStatement.setInt(3, itemPedido.getQuantidade());
 		preparedStatement.setBoolean(4, itemPedido.getSituacao());
-		preparedStatement.setFloat(5, itemPedido.getQuantidade());
-		if (itemPedido.getId_itemPedido() == 0L) {
+		preparedStatement.setDouble(5, itemPedido.getTotalItem());
+		if (itemPedido.getId_itemPedido() != null) {
 			preparedStatement.setLong(6, itemPedido.getId_itemPedido());
 		}
 
@@ -196,7 +194,7 @@ public class ItemPedidoDAO extends BaseDAO {
 		item.setId_pedido(resultSet.getLong("id_pedido"));
 		item.setId_produto(resultSet.getLong("id_produto"));
 		ProdutoDAO produtoDAO = new ProdutoDAO();
-		Produto produto = produtoDAO.getById(item.getId_produto());
+		produto = produtoDAO.getById(item.getId_produto());
 		item.setProduto(produto);
 		return item;
 	}

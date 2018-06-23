@@ -6,7 +6,6 @@ public class Produto {
 	private float valor;
 	private String descricao;
 	private boolean situacao;
-	ItemPedido itemPedido;
 	/**
 	 * @return the id_produto
 	 */
@@ -70,7 +69,7 @@ public class Produto {
 	@Override
 	public String toString() {
 		return "\nProduto [id_produto=" + id_produto + ", nome=" + nome + ", valor=" + valor + ", descricao=" + descricao
-				+ ", situacao=" + situacao + ", itemPedido=" + itemPedido + "]";
+				+ ", situacao=" + situacao + "]";
 	}
 	
 }

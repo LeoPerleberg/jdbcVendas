@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import model.ItemPedido;
 import model.Pedido;
 
 public class PedidoDAO extends BaseDAO {
+
 	public List<Pedido> getAll() throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -86,7 +88,99 @@ public class PedidoDAO extends BaseDAO {
 
 	}
 	
+	public boolean insert(Pedido pedido) throws SQLException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		try {
+			String sql = "INSERT INTO pedidos(pagamento, estado, data_criacao, data_modificacao, id_cliente, totalpedido, situacao) VALUES (?, ?, ?, ?, ?, ?, ?);";
+			connection = BaseDAO.getConection();
+			preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			pedidoToPrepareStatement(pedido, preparedStatement);
+			int cont = preparedStatement.executeUpdate();
+			if (pedido.getId_pedido() == null) {
+				resultSet = preparedStatement.getGeneratedKeys();
+				if (resultSet.next()) {
+					pedido.setId_pedido(resultSet.getLong("id_pedido"));
+				}
+			}
+			return cont > 0 ? true : false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (connection != null) {
+				connection.close();
+			}
+			if (preparedStatement != null) {
+				preparedStatement.close();
+			}
+			if (resultSet != null) {
+				resultSet.close();
+			}
+		}
+	}
 	
+	public boolean update(Pedido pedido) throws SQLException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		try {
+			connection = getConection();
+			String sql = "UPDATE pedidos "
+					+ "SET pagamento=?, estado=?, data_criacao=?,  data_modificacao=?, id_cliente=?, totalpedido=?, situacao=? "
+					+ "WHERE id_pedido=?;";
+			preparedStatement = connection.prepareStatement(sql);
+			pedidoToPrepareStatement(pedido, preparedStatement);
+			int cont = preparedStatement.executeUpdate();
+			return cont > 0 ? true : false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (connection != null) {
+				connection.close();
+			}
+			if (preparedStatement != null) {
+				preparedStatement.close();
+			}
+		}
+	}
+	
+	public boolean delete(Pedido pedido) throws SQLException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		try {
+			connection = getConection();
+			preparedStatement = connection.prepareStatement("UPDATE pedidos SET situacao=? WHERE id_pedido=?;");
+			preparedStatement.setBoolean(1, false);
+			preparedStatement.setLong(2, pedido.getId_pedido());
+			int cont = preparedStatement.executeUpdate();
+			return cont > 0 ? true : false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (connection != null) {
+				connection.close();
+			}
+			if (preparedStatement != null) {
+				preparedStatement.close();
+			}
+		}
+	}
+
+	private void pedidoToPrepareStatement(Pedido pedido, PreparedStatement preparedStatement) throws SQLException {
+		preparedStatement.setString(1, pedido.getFormaPagamento());
+		preparedStatement.setString(2, pedido.getEstado());
+		preparedStatement.setDate(3, pedido.getDataCriacao());
+		preparedStatement.setDate(4, pedido.getDataModificacao());
+		preparedStatement.setLong(5, pedido.getId_cliente());
+		preparedStatement.setDouble(6, pedido.getTotalPedido());
+		preparedStatement.setBoolean(7, pedido.getSituacao());
+		if (pedido.getId_pedido() != null) {
+			preparedStatement.setLong(8, pedido.getId_pedido());
+		}
+	}
 
 	private Pedido resultSetToPedido(ResultSet resultSet) throws SQLException {
 		Pedido pedido = new Pedido();
@@ -99,7 +193,7 @@ public class PedidoDAO extends BaseDAO {
 		pedido.setTotalPedido(resultSet.getDouble("totalpedido"));
 		pedido.setSituacao(resultSet.getBoolean("situacao"));
 		ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO();
-		List<ItemPedido> itens = itemPedidoDAO.getByIdPedido(pedido.getId_pedido());
+		List<ItemPedido> itens = itemPedidoDAO.getByIdPedido(pedido);
 		pedido.setItens(itens);
 		ClienteDAO clienteDAO = new ClienteDAO();
 		Cliente cliente = clienteDAO.getById(pedido.getId_cliente());

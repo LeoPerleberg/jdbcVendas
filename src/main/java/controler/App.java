@@ -1,18 +1,22 @@
 package controler;
 
+import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.ClienteDAO;
+import dao.ItemPedidoDAO;
 import dao.ProdutoDAO;
 import dao.PedidoDAO;
 import model.Cliente;
+import model.ItemPedido;
 import model.Pedido;
 import model.Produto;
 
 
 public class App {
-    public static void main( String[] args ) {
+    public static void main( String[] args ) throws SQLException {
     	ProdutoDAO produtoDAO = new ProdutoDAO();
 
     	imprimirListaProd(produtoDAO);
@@ -119,9 +123,63 @@ public class App {
     	imprimirListaClie(clienteDAO);
     	*/
 
+		
+		
+    	
     	PedidoDAO pedidoDAO = new PedidoDAO();
 		imprimirListaPedi(pedidoDAO);
     	System.out.println("\n");
+    	
+    	// insert
+    	Date data = new Date(0);
+    	data.getTime();
+    	Pedido pedido = new Pedido();
+    	ItemPedido item = new ItemPedido();
+    	List<ItemPedido> itens = new ArrayList<ItemPedido>();
+    	item.setProduto(produtoDAO.getById((long) 2));
+    	item.setQuantidade(5);
+    	item.setTotalItem(item.getProduto().getValor() * item.getQuantidade());
+    	item.setSituacao(true);
+    	itens.add(item);
+    	item.setProduto(produtoDAO.getById((long) 19));
+    	item.setQuantidade(9);
+    	item.setTotalItem(item.getProduto().getValor() * item.getQuantidade());
+    	item.setSituacao(true);
+    	itens.add(item);
+    	
+    	pedido.setFormaPagamento("á vista");
+    	pedido.setEstado("faturado");
+    	pedido.setDataCriacao(data);
+    	pedido.setDataModificacao(data);
+    	pedido.setCliente(clienteDAO.getById((long) 7));
+    	pedido.setTotalPedido(0);
+    	pedido.setSituacao(true);
+    	pedido.setItens(itens);
+    	try {
+			if (pedidoDAO.insert(pedido)) {
+				System.out.println("\nPedido salvo.\n");
+				for (int i = 0; i < itens.size(); i++) {
+					ItemPedidoDAO itemDAO = new ItemPedidoDAO();
+					item = itens.get(i);
+					item.setId_pedido(pedido.getId_pedido());
+					try {
+						itemDAO.insert(item);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			} else {
+				System.out.println("\nErro ao tentar salvar o pedido.\n");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}    	
+
+		imprimirListaPedi(pedidoDAO);
+    	System.out.println("\n");
+    	
+    	
+    	
     	
     }
 

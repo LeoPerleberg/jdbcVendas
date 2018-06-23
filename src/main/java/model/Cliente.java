@@ -1,7 +1,7 @@
 package model;
 
 public class Cliente {
-	private long id_cliente;
+	private Long id_cliente;
 	private String nome;
 	private String sobrenome;
 	private boolean situacao;

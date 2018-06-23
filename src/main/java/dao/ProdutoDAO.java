@@ -37,7 +37,7 @@ public class ProdutoDAO extends BaseDAO {
 	}
 
 	public Produto getById(Long i) throws SQLException {
-
+		Produto produto = null;
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
 		ResultSet resultSet = null;
@@ -49,11 +49,10 @@ public class ProdutoDAO extends BaseDAO {
 			prepareStatement = connection.prepareStatement(sql);
 			prepareStatement.setLong(1, i);
 			resultSet = prepareStatement.executeQuery();
-			Produto produto = null;
 			if (resultSet.next()) {
-
 				produto = resultSetToProduto(resultSet);
-
+			} else {
+				System.out.println("O produto com id " + i + " não existe\n");
 			}
 			return produto;
 
@@ -68,7 +67,7 @@ public class ProdutoDAO extends BaseDAO {
 
 	}
 
-	public List<Produto> getByName(String i) throws SQLException {
+	public List<Produto> getByName(Produto produto) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -77,7 +76,7 @@ public class ProdutoDAO extends BaseDAO {
 			connection = getConection();
 			String sql = "SELECT * FROM produtos WHERE nome = ?";
 			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setString(1, i);
+			preparedStatement.setString(1, produto.getNome());
 			resultSet = preparedStatement.executeQuery();
 			List<Produto> produtos = new ArrayList<Produto>();
 			while (resultSet.next()) {
@@ -94,15 +93,14 @@ public class ProdutoDAO extends BaseDAO {
 		}
 
 	}
-	
+
 	public boolean insert(Produto produto) throws SQLException {
 		Connection conn = null;
 		PreparedStatement prepareStatement = null;
 		ResultSet rs = null;
 
 		try {
-			String sql = "INSERT INTO produtos(nome, valor, descricao, situacao)"
-					+ "VALUES (?, ?, ?, ?);";
+			String sql = "INSERT INTO produtos(nome, valor, descricao, situacao) VALUES (?, ?, ?, ?);";
 			conn = BaseDAO.getConection();
 			prepareStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			produtoToPreparedStatment(produto, prepareStatement);
@@ -130,7 +128,7 @@ public class ProdutoDAO extends BaseDAO {
 		}
 
 	}
-	
+
 	public boolean update(Produto produto) throws SQLException {
 		Connection conn = null;
 		PreparedStatement prepareStatement = null;
@@ -155,7 +153,7 @@ public class ProdutoDAO extends BaseDAO {
 		}
 
 	}
-	
+
 	public boolean delete(Produto produto) throws SQLException {
 		Connection conn = null;
 		PreparedStatement prepareStatement = null;
@@ -179,8 +177,7 @@ public class ProdutoDAO extends BaseDAO {
 			}
 		}
 
-	}	
-	
+	}
 
 	private void produtoToPreparedStatment(Produto produto, PreparedStatement preparedStatement) throws SQLException {
 		preparedStatement.setString(1, produto.getNome());
@@ -190,11 +187,8 @@ public class ProdutoDAO extends BaseDAO {
 		if (produto.getId_produto() != 0L) {
 			preparedStatement.setLong(5, produto.getId_produto());
 		}
-		
-		
 	}
-	
-	
+
 	private Produto resultSetToProduto(ResultSet resultSet) throws SQLException {
 		Produto produto = new Produto();
 		produto.setId_produto(resultSet.getLong("id_produto"));

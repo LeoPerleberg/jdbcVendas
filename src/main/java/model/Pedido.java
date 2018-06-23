@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Pedido {
 	private Long id_pedido;
 	private String formaPagamento; 
@@ -69,7 +70,7 @@ public class Pedido {
 		this.totalPedido = totalPedido;
 	}
 
-	public boolean isSituacao() {
+	public boolean getSituacao() {
 		return situacao;
 	}
 
@@ -91,6 +92,7 @@ public class Pedido {
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+		this.id_cliente = cliente.getId_cliente();
 	}
 
 	public List<ItemPedido> getItens() {

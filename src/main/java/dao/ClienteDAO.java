@@ -43,16 +43,15 @@ public class ClienteDAO extends BaseDAO {
 		ResultSet resultSet = null;
 
 		try {
-
+			Cliente cliente = null;
 			connection = getConection();
 			prepareStatement = connection.prepareStatement("select * from clientes where id_cliente = ?");
 			prepareStatement.setLong(1, i);
 			resultSet = prepareStatement.executeQuery();
-			Cliente cliente = null;
 			if (resultSet.next()) {
-
 				cliente = resultSetToCliente(resultSet);
-
+			} else {
+				System.out.println("O cliente com id " + i + " não existe\n");
 			}
 			return cliente;
 
@@ -67,7 +66,7 @@ public class ClienteDAO extends BaseDAO {
 
 	}
 
-	public List<Cliente> getByName(String i) throws SQLException {
+	public List<Cliente> getByName(Cliente cliente) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -75,7 +74,7 @@ public class ClienteDAO extends BaseDAO {
 		try {
 			connection = getConection();
 			preparedStatement = connection.prepareStatement("SELECT * FROM clientes WHERE nome = ?");
-			preparedStatement.setString(1, i);
+			preparedStatement.setString(1, cliente.getNome());
 			resultSet = preparedStatement.executeQuery();
 			List<Cliente> clientes = new ArrayList<Cliente>();
 			while (resultSet.next()) {
@@ -92,7 +91,7 @@ public class ClienteDAO extends BaseDAO {
 		}
 
 	}
-	
+
 	public boolean insert(Cliente cliente) throws SQLException {
 		Connection conn = null;
 		PreparedStatement prepareStatement = null;
@@ -127,8 +126,6 @@ public class ClienteDAO extends BaseDAO {
 		}
 
 	}
-	
-
 
 	public boolean update(Cliente cliente) throws SQLException {
 		Connection conn = null;
@@ -153,8 +150,8 @@ public class ClienteDAO extends BaseDAO {
 			}
 		}
 
-	}	
-	
+	}
+
 	public boolean delete(Cliente cliente) throws SQLException {
 		Connection conn = null;
 		PreparedStatement prepareStatement = null;
@@ -178,7 +175,7 @@ public class ClienteDAO extends BaseDAO {
 			}
 		}
 
-	}	
+	}
 
 	private void clienteToPreparedStatment(Cliente cliente, PreparedStatement prepareStatement) throws SQLException {
 		prepareStatement.setString(1, cliente.getNome());
@@ -187,9 +184,9 @@ public class ClienteDAO extends BaseDAO {
 		if (cliente.getId_cliente() != 0L) {
 			prepareStatement.setLong(4, cliente.getId_cliente());
 		}
-		
+
 	}
-	
+
 	private Cliente resultSetToCliente(ResultSet resultSet) throws SQLException {
 		Cliente cliente = new Cliente();
 		cliente.setId_cliente(resultSet.getLong("id_cliente"));
