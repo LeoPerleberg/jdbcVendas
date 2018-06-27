@@ -47,13 +47,14 @@ public class ItemPedidoDAO extends BaseDAO {
 
 		try {
 			connection = getConection();
-			prepareStatement = connection.prepareStatement("SELECT * FROM itempedido WHERE id_itemPedido = ?;");
-			prepareStatement.setLong(1, item.getId_itemPedido());
+			prepareStatement = connection.prepareStatement("SELECT * FROM itempedido WHERE id_pedido = ? and id_produto = ?;");
+			prepareStatement.setLong(1, item.getId_pedido());
+			prepareStatement.setLong(2, item.getId_produto());
 			resultSet = prepareStatement.executeQuery();
 			if (resultSet.next()) {
 				item = resultSetToItem(resultSet);
 			} else {
-				System.out.println("O item com id " + item.getId_itemPedido() + " não existe\n");
+				System.out.println("O item do pedido " + item.getId_pedido() + " e do produto " + item.getId_produto() + " não existe\n");
 			}
 			return item;
 		} catch (SQLException e) {
