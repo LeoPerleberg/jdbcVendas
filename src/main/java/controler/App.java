@@ -2,6 +2,7 @@ package controler;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class App {
 		imprimirListaProd(produtoDAO);
 		System.out.println("\n");
 
-/*		// insert
+		// insert
 		Produto produto = new Produto();
 		produto.setNome("Caneta");
 		produto.setValor((float) 1.25);
@@ -70,7 +71,7 @@ public class App {
 			e.printStackTrace();
 		}
 		imprimirListaProd(produtoDAO);
-		*/
+		
 
 		ClienteDAO clienteDAO = ClienteDAO.getInstance();
 		imprimirListaClie(clienteDAO);
@@ -130,8 +131,7 @@ public class App {
 		System.out.println("\n");
 
 		double vPedido = 0;
-		Date data = new Date(0);
-		data.getTime();
+		Date data = Date.valueOf(LocalDate.now());
 		Pedido pedido = new Pedido();
 		ItemPedido item = new ItemPedido();
 		ItemPedido item2 = new ItemPedido();
@@ -152,7 +152,6 @@ public class App {
 		pedido.setFormaPagamento("á vista");
 		pedido.setEstado("faturado");
 		pedido.setDataCriacao(data);
-		pedido.setDataModificacao(data);
 		pedido.setCliente(clienteDAO.getById((long) 8));
 		pedido.setTotalPedido(vPedido);
 		pedido.setSituacao(true);
@@ -182,14 +181,12 @@ public class App {
 
 		// update
 
-		data = new Date(0);
-		data.getTime();
 		pedido = new Pedido();
-		pedido = pedidoDAO.getById(29); // pedido a ser atualizado
+		pedido = pedidoDAO.getById(2); // pedido a ser atualizado
 		vPedido = pedido.getTotalPedido();
 		item = new ItemPedido();
 		itens = new ArrayList<ItemPedido>();
-		item.setProduto(produtoDAO.getById((long) 1));
+		item.setProduto(produtoDAO.getById((long) 23));
 		item.setQuantidade(9);
 		item.setTotalItem(item.getProduto().getValor() * item.getQuantidade());
 		vPedido = vPedido + item.getTotalItem();
@@ -198,7 +195,6 @@ public class App {
 
 		pedido.setFormaPagamento("á praso");
 		pedido.setEstado("faturado");
-		pedido.setDataModificacao(data);
 		pedido.setCliente(clienteDAO.getById((long) 7));
 		pedido.setTotalPedido(vPedido);
 		pedido.setSituacao(true);
@@ -230,7 +226,7 @@ public class App {
 		data = new Date(0);
 		data.getTime();
 		pedido = new Pedido();
-		pedido = pedidoDAO.getById(29); // pedido a ser removido
+		pedido = pedidoDAO.getById(2); // pedido a ser removido
 		pedido.setDataModificacao(data);
 		pedido.setSituacao(false);
 		try {

@@ -1,10 +1,12 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -185,7 +187,7 @@ public class PedidoDAO extends BaseDAO {
 		preparedStatement.setString(1, pedido.getFormaPagamento());
 		preparedStatement.setString(2, pedido.getEstado());
 		preparedStatement.setDate(3, pedido.getDataCriacao());
-		preparedStatement.setDate(4, pedido.getDataModificacao());
+		preparedStatement.setDate(4, Date.valueOf(LocalDate.now()));
 		preparedStatement.setLong(5, pedido.getId_cliente());
 		preparedStatement.setDouble(6, pedido.getTotalPedido());
 		preparedStatement.setBoolean(7, pedido.getSituacao());

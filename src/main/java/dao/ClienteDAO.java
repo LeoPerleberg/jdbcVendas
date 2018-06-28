@@ -116,7 +116,7 @@ public class ClienteDAO extends BaseDAO {
 			prepareStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			clienteToPreparedStatment(cliente, prepareStatement);
 			int cont = prepareStatement.executeUpdate();
-			if (cliente.getId_cliente() == 0L) {
+			if (cliente.getId_cliente() == null) {
 				rs = prepareStatement.getGeneratedKeys();
 				if (rs.next()) {
 					cliente.setId_cliente(rs.getLong("id_cliente"));
@@ -194,7 +194,7 @@ public class ClienteDAO extends BaseDAO {
 		prepareStatement.setString(1, cliente.getNome());
 		prepareStatement.setString(2, cliente.getSobrenome());
 		prepareStatement.setBoolean(3, cliente.getSituacao());
-		if (cliente.getId_cliente() != 0L) {
+		if (cliente.getId_cliente() != null) {
 			prepareStatement.setLong(4, cliente.getId_cliente());
 		}
 

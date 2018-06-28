@@ -8,13 +8,13 @@ public class Cliente {
 	/**
 	 * @return the id_cliente
 	 */
-	public long getId_cliente() {
+	public Long getId_cliente() {
 		return id_cliente;
 	}
 	/**
 	 * @param id_cliente the id_cliente to set
 	 */
-	public void setId_cliente(long id_cliente) {
+	public void setId_cliente(Long id_cliente) {
 		this.id_cliente = id_cliente;
 	}
 	/**
