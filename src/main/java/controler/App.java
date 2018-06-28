@@ -16,12 +16,12 @@ import model.Produto;
 
 public class App {
 	public static void main(String[] args) throws SQLException {
-		ProdutoDAO produtoDAO = new ProdutoDAO();
+		ProdutoDAO produtoDAO = ProdutoDAO.getInstance();
 
 		imprimirListaProd(produtoDAO);
 		System.out.println("\n");
 
-		// insert
+/*		// insert
 		Produto produto = new Produto();
 		produto.setNome("Caneta");
 		produto.setValor((float) 1.25);
@@ -41,6 +41,7 @@ public class App {
 		imprimirListaProd(produtoDAO);
 
 		// update
+		produto = new Produto();
 		produto = produtoDAO.getById((long) 23);
 		produto.setValor((float) 18.50);
 		produto.setSituacao(true);
@@ -58,7 +59,7 @@ public class App {
 
 		// delete
 		produto = new Produto();
-		produto.setId_produto(18);
+		produto = produtoDAO.getById((long) 17);
 		try {
 			if (produtoDAO.delete(produto)) {
 				System.out.println("\nProduto excluido.\n");
@@ -69,8 +70,9 @@ public class App {
 			e.printStackTrace();
 		}
 		imprimirListaProd(produtoDAO);
+		*/
 
-		ClienteDAO clienteDAO = new ClienteDAO();
+		ClienteDAO clienteDAO = ClienteDAO.getInstance();
 		imprimirListaClie(clienteDAO);
 		System.out.println("\n");
 
@@ -91,6 +93,7 @@ public class App {
 		imprimirListaClie(clienteDAO);
 
 		// update
+		cliente = new Cliente();
 		cliente = clienteDAO.getById((long) 8);
 		cliente.setNome("Leonardo");
 		cliente.setSobrenome("Könsgen Perleberg");
@@ -109,7 +112,7 @@ public class App {
 
 		// delete
 		cliente = new Cliente();
-		cliente.setId_cliente(11);
+		cliente = clienteDAO.getById((long) 11);
 		try {
 			if (clienteDAO.delete(cliente)) {
 				System.out.println("\nCliente excluido.\n");
@@ -122,7 +125,7 @@ public class App {
 		imprimirListaClie(clienteDAO);
 
 		// insert
-		PedidoDAO pedidoDAO = new PedidoDAO();
+		PedidoDAO pedidoDAO = PedidoDAO.getInstance();
 		imprimirListaPedi(pedidoDAO);
 		System.out.println("\n");
 
@@ -158,7 +161,7 @@ public class App {
 			if (pedidoDAO.insert(pedido)) {
 				System.out.println("\nPedido salvo.\n");
 				for (int i = 0; i < itens.size(); i++) {
-					ItemPedidoDAO itemDAO = new ItemPedidoDAO();
+					ItemPedidoDAO itemDAO = ItemPedidoDAO.getInstance();
 					item = itens.get(i);
 					item.setId_pedido(pedido.getId_pedido());
 					try {
@@ -179,7 +182,9 @@ public class App {
 
 		// update
 
+		data = new Date(0);
 		data.getTime();
+		pedido = new Pedido();
 		pedido = pedidoDAO.getById(29); // pedido a ser atualizado
 		vPedido = pedido.getTotalPedido();
 		item = new ItemPedido();
@@ -202,7 +207,7 @@ public class App {
 			if (pedidoDAO.update(pedido)) {
 				System.out.println("\nPedido salvo.\n");
 				for (int i = 0; i < itens.size(); i++) {
-					ItemPedidoDAO itemDAO = new ItemPedidoDAO();
+					ItemPedidoDAO itemDAO = ItemPedidoDAO.getInstance();
 					item = itens.get(i);
 					item.setId_pedido(pedido.getId_pedido());
 					try {

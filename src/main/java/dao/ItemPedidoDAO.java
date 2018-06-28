@@ -13,6 +13,19 @@ import model.Pedido;
 import model.Produto;
 
 public class ItemPedidoDAO extends BaseDAO {
+	private static ItemPedidoDAO itemDAO = null;
+	
+	private ItemPedidoDAO() {}
+	
+	//Padrão de projeto Singleton
+	public static ItemPedidoDAO getInstance() {
+		if (itemDAO == null) {
+			itemDAO = new ItemPedidoDAO();
+			return itemDAO;
+		}
+		return itemDAO;
+	}
+	
 	private Produto produto;
 
 	public List<ItemPedido> getAll() throws SQLException {
@@ -194,7 +207,7 @@ public class ItemPedidoDAO extends BaseDAO {
 		item.setSituacao(resultSet.getBoolean("situacao"));
 		item.setId_pedido(resultSet.getLong("id_pedido"));
 		item.setId_produto(resultSet.getLong("id_produto"));
-		ProdutoDAO produtoDAO = new ProdutoDAO();
+		ProdutoDAO produtoDAO = ProdutoDAO.getInstance();
 		produto = produtoDAO.getById(item.getId_produto());
 		item.setProduto(produto);
 		return item;

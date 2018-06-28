@@ -11,6 +11,19 @@ import java.util.List;
 import model.Cliente;
 
 public class ClienteDAO extends BaseDAO {
+	private static ClienteDAO clienteDAO = null;
+	
+	private ClienteDAO() {}
+	
+	//Padrão de projeto Singleton
+	public static ClienteDAO getInstance() {
+		if (clienteDAO == null) {
+			clienteDAO = new ClienteDAO();
+			return clienteDAO;
+		}
+		return clienteDAO;
+	}
+	
 	public List<Cliente> getAll() throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;

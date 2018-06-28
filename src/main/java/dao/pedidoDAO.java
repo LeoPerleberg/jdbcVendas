@@ -13,6 +13,18 @@ import model.ItemPedido;
 import model.Pedido;
 
 public class PedidoDAO extends BaseDAO {
+	private static PedidoDAO pedidoDAO = null;
+	
+	private PedidoDAO() {}
+	
+	//Padrão de projeto Singleton
+	public static PedidoDAO getInstance() {
+		if (pedidoDAO == null) {
+			pedidoDAO = new PedidoDAO();
+			return pedidoDAO;
+		}
+		return pedidoDAO;
+	}
 
 	public List<Pedido> getAll() throws SQLException {
 		Connection connection = null;
@@ -192,10 +204,10 @@ public class PedidoDAO extends BaseDAO {
 		pedido.setId_cliente(resultSet.getLong("id_cliente"));
 		pedido.setTotalPedido(resultSet.getDouble("totalpedido"));
 		pedido.setSituacao(resultSet.getBoolean("situacao"));
-		ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO();
+		ItemPedidoDAO itemPedidoDAO = ItemPedidoDAO.getInstance();
 		List<ItemPedido> itens = itemPedidoDAO.getByIdPedido(pedido);
 		pedido.setItens(itens);
-		ClienteDAO clienteDAO = new ClienteDAO();
+		ClienteDAO clienteDAO = ClienteDAO.getInstance();
 		Cliente cliente = clienteDAO.getById(pedido.getId_cliente());
 		pedido.setCliente(cliente);
 		return pedido;

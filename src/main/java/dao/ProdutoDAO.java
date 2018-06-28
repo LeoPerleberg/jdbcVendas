@@ -11,6 +11,19 @@ import java.util.List;
 import model.Produto;
 
 public class ProdutoDAO extends BaseDAO {
+	private static ProdutoDAO produtoDAO = null;
+	
+	private ProdutoDAO() {}
+	
+	//Padrão de projeto Singleton
+	public static ProdutoDAO getInstance() {
+		if (produtoDAO == null) {
+			produtoDAO = new ProdutoDAO();
+			return produtoDAO;
+		}
+		return produtoDAO;
+	}
+	
 	public List<Produto> getAll() throws SQLException {
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
